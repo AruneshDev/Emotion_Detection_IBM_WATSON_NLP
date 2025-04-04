@@ -1,3 +1,9 @@
+"""
+Emotion Detection Web App using Flask and Watson NLP.
+This application detects emotions from a given text input
+and returns the dominant emotion along with emotion scores.
+"""
+
 from flask import Flask, request, render_template, jsonify
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -5,10 +11,22 @@ app = Flask("Emotion Detector")
 
 @app.route('/')
 def home():
+    """
+    Renders the home page.
+
+    Returns:
+        HTML page: The home page template.
+    """
     return render_template('index.html')
 
 @app.route('/emotionDetector', methods=['GET'])
 def detect_emotion():
+    """
+    Endpoint to detect emotion from a given text.
+
+    Returns:
+        JSON response: Contains emotion scores and the dominant emotion.
+    """
     # Get the text from the URL query parameter
     text_to_analyze = request.args.get('textToAnalyze')
 
