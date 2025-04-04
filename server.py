@@ -13,18 +13,22 @@ def detect_emotion():
     text_to_analyze = request.args.get('textToAnalyze')
 
     if not text_to_analyze:
-        return jsonify({"message": "No text provided for emotion analysis"}), 400
+        return jsonify({"message": "Invalid text! Please try again!"}), 400
 
     # Get the emotion analysis result
     response = emotion_detector(text_to_analyze)
 
     # Extract the emotions and their scores from the response
-    anger = response.get("anger", 0.0)
-    disgust = response.get("disgust", 0.0)
-    fear = response.get("fear", 0.0)
-    joy = response.get("joy", 0.0)
-    sadness = response.get("sadness", 0.0)
+    anger = response.get("anger", None)
+    disgust = response.get("disgust", None)
+    fear = response.get("fear", None)
+    joy = response.get("joy", None)
+    sadness = response.get("sadness", None)
     dominant_emotion = response.get("dominant_emotion", "none")
+
+    # Handle case when dominant_emotion is None
+    if dominant_emotion == "none":
+        return jsonify({"message": "Invalid text! Please try again!"})
 
     # Format the response as a readable message
     formatted_response = (
