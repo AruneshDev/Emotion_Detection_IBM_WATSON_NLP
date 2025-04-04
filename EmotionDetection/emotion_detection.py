@@ -1,36 +1,48 @@
 import requests
 import json
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
 def emotion_detector(text_to_analyze):
     if not text_to_analyze:
         return {
-            'anger': None,
-            'disgust': None,
-            'fear': None,
-            'joy': None,
-            'sadness': None,
-            'dominant_emotion': None
+            'anger': 0.0,
+            'disgust': 0.0,
+            'fear': 0.0,
+            'joy': 0.0,
+            'sadness': 0.0,
+            'dominant_emotion': 'none'
         }
+
     url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
     headers = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
     myjob = {"raw_document": {"text": text_to_analyze}}
-    try:
-        response = requests.post(url, json=myjob, headers=headers)
 
-        # Handle server response error (status code 400)
-        if response.status_code == 400:
+    try:
+        response = requests.post(url, json=myjob, headers=headers, timeout=10)
+
+        # Check if the response was successful
+        if response.status_code != 200:
+            logging.error(f"Error with status code {response.status_code}")
             return {
-                'anger': None,
-                'disgust': None,
-                'fear': None,
-                'joy': None,
-                'sadness': None,
-                'dominant_emotion': None
+                'anger': 0.0,
+                'disgust': 0.0,
+                'fear': 0.0,
+                'joy': 0.0,
+                'sadness': 0.0,
+                'dominant_emotion': 'none'
             }
+
+        # Log the response
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Text: {response.text}")
 
         # Convert response text to dictionary
         response_dict = json.loads(response.text)
 
-        # Extract emotions and scores correctly
+        # Extract emotions and their scores
         emotions = response_dict.get('emotionPredictions', [])[0].get('emotion', {})
 
         # Initialize emotion scores
@@ -50,15 +62,24 @@ def emotion_detector(text_to_analyze):
 
         return emotion_scores
 
-    except Exception as e:
-        print(f"Error occurred: {str(e)}")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Network error: {str(e)}")
         return {
-            'anger': None,
-            'disgust': None,
-            'fear': None,
-            'joy': None,
-            'sadness': None,
-            'dominant_emotion': None
+            'anger': 0.0,
+            'disgust': 0.0,
+            'fear': 0.0,
+            'joy': 0.0,
+            'sadness': 0.0,
+            'dominant_emotion': 'none'
         }
 
-    
+    except Exception as e:
+        logging.error(f"Error occurred: {str(e)}")
+        return {
+            'anger': 0.0,
+            'disgust': 0.0,
+            'fear': 0.0,
+            'joy': 0.0,
+            'sadness': 0.0,
+            'dominant_emotion': 'none'
+        }
