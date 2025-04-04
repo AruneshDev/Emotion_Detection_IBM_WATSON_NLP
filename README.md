@@ -108,10 +108,10 @@ Your code has been rated at 10.00/10
 
 ## 📸 Screenshots
 1. **App Running:**
-   ![App Screenshot](screenshots/app_running.png)
+   ![App Screenshot](Screenshots/6b_deployment_test.png)
 
 2. **PyLint Score:**
-   ![PyLint Score](screenshots/pylint_10.png)
+   ![PyLint Score](Screenshots/8b_static_code_analysis.png)
 
 ---
 
