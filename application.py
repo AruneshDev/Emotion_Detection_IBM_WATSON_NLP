@@ -4,20 +4,18 @@ import os
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EmotionOptions
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from dotenv import load_dotenv
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
-# Load environment variables from .env file
+from dotenv import load_dotenv
+
 load_dotenv()
 
-# Fetch API key and URL for IBM Watson NLP from environment variables
 api_key = os.getenv("WATSON_API_KEY")
 url = os.getenv("WATSON_URL")
 
-# Authenticate with IBM Watson API
 authenticator = IAMAuthenticator(api_key)
 natural_language_understanding = NaturalLanguageUnderstandingV1(
     version='2021-08-01',
@@ -25,7 +23,6 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
 )
 natural_language_understanding.set_service_url(url)
 
-# Function to detect emotions from the text using Watson NLP
 def emotion_detector(text_to_analyze):
     """
     Calls IBM Watson NLU to detect emotions.
@@ -42,11 +39,9 @@ def emotion_detector(text_to_analyze):
             features=Features(emotion=EmotionOptions())
         ).get_result()
 
-        # Extract emotions from Watson's response
         emotions = response['emotion']['document']['emotion']
         dominant_emotion = max(emotions, key=emotions.get)
 
-        # Return the emotions and the dominant emotion
         return {
             "anger": emotions.get("anger", 0),
             "disgust": emotions.get("disgust", 0),
@@ -58,6 +53,16 @@ def emotion_detector(text_to_analyze):
     except Exception as e:
         return {"error": str(e)}
 
+@app.route('/')
+def home():
+    """
+    Renders the home page.
+    
+    Returns:
+        HTML page: The home page template.
+    """
+    return render_template('index.html')  # Ensure this template exists
+
 @app.route('/emotionDetector', methods=['GET'])
 def detect_emotion():
     """
@@ -66,7 +71,6 @@ def detect_emotion():
     Returns:
         JSON response: Contains emotion scores and the dominant emotion.
     """
-    # Get the text from the URL query parameter
     text_to_analyze = request.args.get('textToAnalyze')
 
     if not text_to_analyze:
@@ -86,18 +90,15 @@ def detect_emotion():
     sadness = response.get("sadness", 0)
     dominant_emotion = response.get("dominant_emotion", "none")
 
-    # Prepare the response in the new format
     formatted_response = (
-        f"The dominant emotion is: {dominant_emotion}\n"
-        f"The scores for all emotions are:\n"
-        f"Sadness: {sadness}\n"
-        f"Joy: {joy}\n"
-        f"Fear: {fear}\n"
-        f"Disgust: {disgust}\n"
-        f"Anger: {anger}\n"
+        f"For the given statement, the system response is 'anger': {anger}, "
+        f"'disgust': {disgust}, 'fear': {fear}, 'joy': {joy}, "
+        f"and 'sadness': {sadness}. The dominant emotion is {dominant_emotion}."
     )
 
     return jsonify({"message": formatted_response})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)), debug=True)
+
+    # app.run(host='0.0.0.0', port=8080, debug=True)
