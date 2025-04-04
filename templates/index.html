@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="/static/mywebscript.js"></script>
@@ -29,4 +29,79 @@
             <div id="system_response" style="padding: 25px 25px 25px 25px;"></div>
         </div>
     </div>
+</body> -->
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="/static/mywebscript.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        .card {
+            width: 50%;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .emotion-icon {
+            font-size: 50px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="center-heading">NLP - Emotion Detection</h1>
+            <div class="mt-4">
+                <label class="form-label">Please enter the text to be analyzed</label>
+                <input type="text" class="form-control" id="textToAnalyze" placeholder="Type your text here...">
+                <button onclick="RunSentimentAnalysis()" class="btn btn-secondary mt-3">Run Sentiment Analysis</button>
+            </div>
+            <h3 class="mt-4">Result of Emotion Detection</h3>
+            <div id="emotionIcon" class="emotion-icon"></div>
+            <div id="system_response" class="mt-2"></div>
+        </div>
+    </div>
+    <script>
+        function showEmotionIcon(emotion) {
+            const icons = {
+                joy: '😊',
+                anger: '😡',
+                disgust: '🤢',
+                fear: '😱',
+                sadness: '😢'
+            };
+            return icons[emotion] || '😐';
+        }
+
+        function RunSentimentAnalysis() {
+            const textToAnalyze = document.getElementById("textToAnalyze").value;
+            fetch(`/emotionDetector?textToAnalyze=${encodeURIComponent(textToAnalyze)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const message = data.message;
+                    const dominantEmotion = message.match(/The dominant emotion is (\w+)/)[1];
+                    document.getElementById("system_response").textContent = message;
+                    document.getElementById("emotionIcon").textContent = showEmotionIcon(dominantEmotion);
+                })
+                .catch(error => {
+                    document.getElementById("system_response").textContent = "Error: " + error.message;
+                });
+        }
+    </script>
 </body>
+</html>

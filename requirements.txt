@@ -4,3 +4,4 @@ watson-developer-cloud
 ibm-watson
 requests
 python-dotenv
+flask-cors

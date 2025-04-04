@@ -2,7 +2,9 @@
 
 ## 📑 Project Overview
 This project is an **AI-based web application** that detects human emotions from text input using **Watson NLP libraries**. Built as part of an e-commerce company's initiative, the application analyzes customer feedback to understand emotions such as **joy, sadness, anger, fear, and disgust**.
+
 ![Project Cover](Screenshots/Cover.png)
+
 The application is built with **Flask** for web deployment and follows **PEP8 standards** with a perfect **10/10 score** in static code analysis using **PyLint**.
 
 ---
@@ -26,13 +28,14 @@ The application is built with **Flask** for web deployment and follows **PEP8 st
 ---
 
 ## 🛠️ Technologies Used
-- **Python 3.13**
+- **Python 3.11.11**
 - **Flask:** Web framework for building the web application.
 - **Watson NLP:** Used for emotion detection.
 - **Requests:** For making API calls.
 - **PyLint:** To ensure code quality and PEP8 compliance.
 
 ---
+
 
 ## 📂 Project Structure
 ```
@@ -73,7 +76,7 @@ python server.py
 ```
 Access the application at:
 ```
-http://localhost:5000/
+http://localhost:8080/
 ```
 
 ---
@@ -85,6 +88,49 @@ http://localhost:5000/
 4. View the analyzed emotion and emotion scores displayed on the screen.
 
 ---
+## 🎯 Example Phrases for IBM Watson NLP
+
+Here are some example phrases that you can use to test the emotion detection capabilities of IBM Watson:
+
+    Joy:
+
+        "I am feeling so happy today!"
+
+        "This is the best day of my life!"
+
+        "I love this! I feel amazing!"
+
+    Sadness:
+
+        "I feel really down today."
+
+        "I'm so upset and tired."
+
+        "Everything feels so empty right now."
+
+    Anger:
+
+        "I am furious about this situation."
+
+        "This is completely unacceptable!"
+
+        "I can't believe this is happening, I am so angry!"
+
+    Fear:
+
+        "I'm so scared about what's going to happen next."
+
+        "I am terrified of the consequences."
+
+        "What if I fail? I am really nervous."
+
+    Disgust:
+
+        "I can't stand this mess anymore."
+
+        "This is disgusting, I can't even look at it."
+
+        "I feel repulsed by how things are going."
 
 ## 🧪 Testing
 
@@ -112,30 +158,33 @@ Your code has been rated at 10.00/10
 
 2. **PyLint Score:**
    ![PyLint Score](Screenshots/8b_static_code_analysis.png)
+3. **Deployed UI**
+    ![Deployed](Screenshots/Updated_UI.png)
 
 ---
-
 ## 🌐 Deployment
-The app can be deployed on any web server. Follow these steps for deployment on **Heroku**:
 
-### Step 1: Install Heroku CLI
-```bash
-brew tap heroku/brew && brew install heroku
-```
+The app can be deployed on any web server. Follow these steps for deployment on Railway:
+Step 1: Sign up for Railway
 
-### Step 2: Create a Heroku App
-```bash
-heroku create emotion-detection-app
-```
+Visit Railway and sign up for an account.
+Step 2: Link the project to Railway
 
-### Step 3: Deploy the App
-```bash
-git push heroku main
-```
+    Create a new project on Railway.
+
+    Connect your GitHub repository to Railway.
+
+    Follow the setup steps on Railway's platform to deploy the project.
+
+Step 3: Open the App
+
+After deployment, you can access your app at:
+
 
 ### Step 4: Open the App
 ```bash
-heroku open
+https://emotiondetector-productionupdated.up.railway.app/
+
 ```
 
 ---
