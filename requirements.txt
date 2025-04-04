@@ -3,3 +3,4 @@ gunicorn
 watson-developer-cloud
 ibm-watson
 requests
+python-dotenv
