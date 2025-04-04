@@ -107,6 +107,8 @@ Here are some example phrases that you can use to test the emotion detection cap
         "I'm so upset and tired."
 
         "Everything feels so empty right now."
+        
+        "I can't stand this mess anymore."
 
     Anger:
 
@@ -125,8 +127,6 @@ Here are some example phrases that you can use to test the emotion detection cap
         "What if I fail? I am really nervous."
 
     Disgust:
-
-        "I can't stand this mess anymore."
 
         "This is disgusting, I can't even look at it."
 
