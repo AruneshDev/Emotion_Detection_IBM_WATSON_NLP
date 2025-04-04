@@ -2,7 +2,7 @@
 
 ## 📑 Project Overview
 This project is an **AI-based web application** that detects human emotions from text input using **Watson NLP libraries**. Built as part of an e-commerce company's initiative, the application analyzes customer feedback to understand emotions such as **joy, sadness, anger, fear, and disgust**.
-
+![Project Cover](Screenshots/Cover.png)
 The application is built with **Flask** for web deployment and follows **PEP8 standards** with a perfect **10/10 score** in static code analysis using **PyLint**.
 
 ---
