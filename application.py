@@ -8,7 +8,7 @@ from flask import Flask, request, render_template, jsonify
 from EmotionDetection.emotion_detection import emotion_detector
 
 # app = Flask("Emotion Detector")
-application = Flask("Emotion Detector")
+app = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -59,5 +59,4 @@ def detect_emotion():
     return jsonify({"message": formatted_response})
 
 if __name__ == '__main__':
-    application.run(host='0.0.0.0', port=5000, debug=True)
-    # app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)  # Use 'app.run' here instead of 'application.run'
