@@ -1,3 +1,5 @@
 Flask
 gunicorn
+watson-developer-cloud
+ibm-watson
 requests
