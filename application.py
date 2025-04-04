@@ -10,14 +10,14 @@ from dotenv import load_dotenv
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+# Load environment variables from .env file
 load_dotenv()
 
+# Fetch API key and URL for IBM Watson NLP from environment variables
 api_key = os.getenv("WATSON_API_KEY")
 url = os.getenv("WATSON_URL")
 
-# print("API Key:", api_key)  # Debug: Check if the API key is loaded
-# print("URL:", url)          # Debug: Check if the URL is loaded
-
+# Authenticate with IBM Watson API
 authenticator = IAMAuthenticator(api_key)
 natural_language_understanding = NaturalLanguageUnderstandingV1(
     version='2021-08-01',
@@ -25,6 +25,7 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
 )
 natural_language_understanding.set_service_url(url)
 
+# Function to detect emotions from the text using Watson NLP
 def emotion_detector(text_to_analyze):
     """
     Calls IBM Watson NLU to detect emotions.
@@ -40,12 +41,12 @@ def emotion_detector(text_to_analyze):
             text=text_to_analyze,
             features=Features(emotion=EmotionOptions())
         ).get_result()
-        
-        print(f"Watson Response: {response}")  # Log the response
-        
+
+        # Extract emotions from Watson's response
         emotions = response['emotion']['document']['emotion']
         dominant_emotion = max(emotions, key=emotions.get)
 
+        # Return the emotions and the dominant emotion
         return {
             "anger": emotions.get("anger", 0),
             "disgust": emotions.get("disgust", 0),
@@ -57,44 +58,44 @@ def emotion_detector(text_to_analyze):
     except Exception as e:
         return {"error": str(e)}
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
 @app.route('/emotionDetector', methods=['GET'])
 def detect_emotion():
+    """
+    Endpoint to detect emotion from a given text.
+    
+    Returns:
+        JSON response: Contains emotion scores and the dominant emotion.
+    """
+    # Get the text from the URL query parameter
     text_to_analyze = request.args.get('textToAnalyze')
 
     if not text_to_analyze:
         return jsonify({"message": "Invalid text! Please try again!"}), 400
 
+    # Get the emotion analysis result
     response = emotion_detector(text_to_analyze)
 
     if "error" in response:
         return jsonify({"message": "Error during analysis: " + response["error"]}), 500
 
+    # Extract the emotions and their scores
     anger = response.get("anger", 0)
     disgust = response.get("disgust", 0)
     fear = response.get("fear", 0)
     joy = response.get("joy", 0)
     sadness = response.get("sadness", 0)
     dominant_emotion = response.get("dominant_emotion", "none")
+
+    # Prepare the response in the new format
     formatted_response = (
-    f"The dominant emotion is: {dominant_emotion}\n"
-    f"The scores for all emotions are:\n"
-    f"Anger: {anger}\n"
-    f"Disgust: {disgust}\n"
-    f"Fear: {fear}\n"
-    f"Joy: {joy}\n"
-    f"Sadness: {sadness}"
-)
-
-
-    # formatted_response = (
-    #     f"For the given statement, the system response is 'anger': {anger}, "
-    #     f"'disgust': {disgust}, 'fear': {fear}, 'joy': {joy}, "
-    #     f"and 'sadness': {sadness}. The dominant emotion is {dominant_emotion}."
-    # )
+        f"The dominant emotion is: {dominant_emotion}\n"
+        f"The scores for all emotions are:\n"
+        f"Sadness: {sadness}\n"
+        f"Joy: {joy}\n"
+        f"Fear: {fear}\n"
+        f"Disgust: {disgust}\n"
+        f"Anger: {anger}\n"
+    )
 
     return jsonify({"message": formatted_response})
 
